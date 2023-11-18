@@ -1,0 +1,28 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-deployment 
+  labels:
+    app: order
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+        - name: order-service
+          image: ghcr.io/jaygung17/order-service:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: AMQP_URL
+              #set as amqp://<username>.<password>@rabbitmq:5672, 
+              value: "amqp://jaygung17:jaygung17password@rabbitmq.default.svc.cluster.local:5672"
